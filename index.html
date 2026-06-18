@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leporce Task Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-gray-800 antialiased overflow-hidden h-screen">
+
+    <div id="authScreen" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-950 p-4 relative z-50">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all border border-slate-100">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center mb-2 bg-white rounded-full p-1 shadow-sm">
+                    <svg class="w-44 h-44" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="110" cy="110" r="68" fill="#ffffff" stroke="#222222" stroke-width="2.5"/>
+                        <circle cx="110" cy="110" r="64" fill="none" stroke="#e2e8f0" stroke-width="1.5"/>
+                        <g transform="translate(14, 5)">
+                            <path d="M86,74 L108,70 L118,77 L96,81 Z" fill="#d9b48f" stroke="#b08d68" stroke-width="1"/>
+                            <path d="M86,74 L96,81 L96,98 L86,91 Z" fill="#c69e77" stroke="#b08d68" stroke-width="1"/>
+                            <path d="M96,81 L118,77 L118,94 L96,98 Z" fill="#b58f67" stroke="#b08d68" stroke-width="1"/>
+                            <path d="M97,72 L107,79" stroke="#eab308" stroke-width="2.5"/> 
+                            <path d="M68,85 L84,82 L92,87 L76,90 Z" fill="#cc9966" stroke="#996633" stroke-width="1"/>
+                            <path d="M68,85 L76,90 L76,102 L68,97 Z" fill="#b3804d" stroke="#996633" stroke-width="1"/>
+                            <path d="M76,90 L92,87 L92,99 L76,102 Z" fill="#996633" stroke="#996633" stroke-width="1"/>
+                            <path d="M70,87 L82,84" stroke="#2563eb" stroke-width="2"/> 
+                            <path d="M110,84 L128,82 L136,88 L118,90 Z" fill="#cc9966" stroke="#996633" stroke-width="1"/>
+                            <path d="M110,84 L118,90 L118,104 L110,98 Z" fill="#b3804d" stroke="#996633" stroke-width="1"/>
+                            <path d="M118,90 L136,88 L136,102 L118,104 Z" fill="#996633" stroke="#996633" stroke-width="1"/>
+                            <path d="M112,86 L124,84" stroke="#2563eb" stroke-width="2"/> 
+                            <path d="M84,94 L98,92 L104,96 L90,98 Z" fill="#e0b888" stroke="#b3804d" stroke-width="1"/>
+                            <path d="M84,94 L90,98 L90,107 L84,103 Z" fill="#cc9966" stroke="#b3804d" stroke-width="1"/>
+                            <path d="M90,98 L104,96 L104,105 L90,107 Z" fill="#b3804d" stroke="#b3804d" stroke-width="1"/>
+                            <path d="M134,91 L146,89 L151,93 L139,95 Z" fill="#e0b888" stroke="#b3804d" stroke-width="1"/>
+                            <path d="M134,91 L153,95 L153,103 L134,99 Z" fill="#cc9966" stroke="#b3804d" stroke-width="1"/>
+                            <path d="M139,95 L146,89 L146,97 L139,103 Z" fill="#b3804d" stroke="#b3804d" stroke-width="1"/>
+                            <path d="M141,97 L145,96" stroke="#2563eb" stroke-width="1.5"/>
+                        </g>
+                        <text x="110" y="132" font-family="'Helvetica Neue', 'Arial', sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#000000">Leporce</text>
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Leporce Task Tracker</h1>
+                <p class="text-sm text-gray-500 mt-1">Track. Plan. Execute.</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">User ID</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" id="username" required class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm" placeholder="User ID">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-2">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="password" required class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition text-sm" placeholder="••••••••">
+                    </div>
+                </div>
+                <div id="loginError" class="text-rose-500 text-xs hidden font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i> Authentication failed. Verified credentials required.</div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-indigo-500/20 text-sm cursor-pointer">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="appScreen" class="hidden h-screen w-full flex overflow-hidden">
+        
+        <aside class="hidden md:flex w-64 bg-slate-900 text-slate-300 flex-col border-r border-slate-800 h-full shrink-0 justify-between select-none">
+            <div class="flex flex-col flex-1 min-h-0">
+                <div class="p-5 border-b border-slate-800 flex items-center space-x-3 shrink-0">
+                    <span class="text-indigo-500 text-xl"><i class="fa-solid fa-square-poll-vertical"></i></span>
+                    <span class="font-bold text-white tracking-wide text-base">Smart Task Operations</span>
+                </div>
+                
+                <div class="p-4 bg-slate-800/40 m-4 rounded-xl border border-slate-700/30 flex items-center space-x-3 shrink-0">
+                    <img id="sidebarAvatarDisplay" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop" class="w-10 h-10 rounded-full object-cover border border-slate-700" alt="Avatar">
+                    <div class="min-w-0 flex-1">
+                        <p id="navUserRealName" class="font-bold text-white truncate">---</p>
+                        <span id="navUserBadge" class="inline-block text-[9px] uppercase font-extrabold px-1.5 py-0.5 rounded-sm mt-0.5">---</span>
+                    </div>
+                </div>
+
+                <nav class="flex-1 px-4 space-y-1 text-sm overflow-y-auto">
+                    <button onclick="switchView('tasks')" id="tabBtnTasks" class="w-full flex items-center justify-between px-4 py-3 text-white bg-indigo-600 rounded-xl transition font-medium cursor-pointer">
+                        <span class="flex items-center space-x-3"><i class="fa-solid fa-list-check"></i> <span>Tasks Board</span></span>
+                    </button>
+                    <button onclick="switchView('history')" id="tabBtnHistory" class="w-full flex items-center justify-between px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-slate-200 rounded-xl transition font-medium cursor-pointer">
+                        <span class="flex items-center space-x-3"><i class="fa-solid fa-clock-rotate-left"></i> <span>History</span></span>
+                    </button>
+                    <button onclick="switchView('recycle')" id="tabBtnRecycle" class="w-full flex items-center justify-between px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-slate-200 rounded-xl transition font-medium cursor-pointer">
+                        <span class="flex items-center space-x-3"><i class="fa-solid fa-trash-arrow-up"></i> <span>Recycle Bin</span></span>
+                        <span id="recycleCountBadge" class="bg-slate-800 text-slate-400 font-bold px-2 py-0.5 text-xs rounded-full">0</span>
+                    </button>
+                </nav>
+            </div>
+
+            <div class="p-4 border-t border-slate-800 shrink-0 bg-slate-900/90 backdrop-blur-xs">
+                <button id="logoutBtn" class="w-full flex items-center justify-center space-x-2 bg-slate-800 hover:bg-rose-950/40 hover:text-rose-400 text-slate-400 py-2.5 rounded-xl transition text-xs font-semibold uppercase tracking-wider cursor-pointer">
+                    <i class="fa-solid fa-power-off"></i> <span>Log out</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-slate-50">
+            <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 md:px-8 shrink-0 shadow-xs relative z-30 select-none">
+                <div class="flex items-center space-x-4">
+                    <h2 id="dashboardTitle" class="text-lg font-bold text-slate-800 tracking-tight">Productivity Hub</h2>
+                    
+                    <div id="adminUserSelectorContainer" class="hidden flex items-center space-x-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                        <span class="text-xs font-semibold text-slate-500 pl-2"><i class="fa-solid fa-user-gear mr-1"></i> View Team Dashboard:</span>
+                        <select id="adminUserSelector" class="bg-white border-none rounded-lg px-2 py-1 text-xs font-bold text-slate-700 focus:outline-none"></select>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="text-right hidden sm:block">
+                        <p id="liveClockTime" class="text-sm font-bold text-slate-900 tracking-mono">00:00:00 AM</p>
+                        <p id="liveClockDate" class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">January 1, 1970</p>
+                    </div>
+                    <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
+                    <div class="relative inline-flex items-center bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
+                        <i class="fa-regular fa-calendar-days text-slate-500 text-sm mr-2"></i>
+                        <input type="date" id="calendarHistoricalPicker" class="text-xs font-bold text-slate-700 bg-transparent outline-none cursor-pointer border-none p-0 w-28">
+                    </div>
+                    
+                    <div class="h-8 w-px bg-slate-200"></div>
+                    <div class="relative">
+                        <button onclick="toggleProfileSettingsDropdown()" class="flex items-center space-x-2 hover:bg-slate-50 p-1.5 rounded-xl transition focus:outline-none cursor-pointer">
+                            <img id="topbarAvatarDisplay" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop" class="w-8 h-8 rounded-full object-cover ring-2 ring-indigo-500/20" alt="Avatar">
+                            <i class="fa-solid fa-chevron-down text-slate-400 text-xs"></i>
+                        </button>
+                        <div id="profileSettingsDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 py-4 px-4 z-50">
+                            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 mb-3"><i class="fa-solid fa-user-gear mr-1 text-indigo-500"></i> Profile Settings</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Image URL</label>
+                                    <input type="text" id="avatarUrlInput" class="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50" placeholder="https://example.com/image.jpg">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Upload Image from Device</label>
+                                    <label class="w-full flex flex-col items-center px-3 py-2 bg-slate-50 text-slate-500 rounded-xl border border-slate-200 border-dashed cursor-pointer hover:bg-slate-100 transition text-center">
+                                        <i class="fa-solid fa-cloud-arrow-up text-sm mb-1 text-indigo-500"></i>
+                                        <span id="fileUploadLabelText" class="text-[11px] font-medium">Select file from local storage</span>
+                                        <input type="file" id="avatarLocalFileInput" accept="image/*" class="hidden">
+                                    </label>
+                                </div>
+                                <button onclick="saveProfileAvatar()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 rounded-xl transition uppercase tracking-wider shadow-xs cursor-pointer">Apply Updates</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="flex-1 overflow-hidden relative">
+                
+                <div id="viewContainerTasks" class="absolute inset-0 overflow-y-auto p-6 md:p-8 space-y-6">
+                    
+                    <section class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs select-none">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-900 tracking-tight uppercase">Progress Insights</h3>
+                                <p class="text-xs text-slate-400">Total metrics progress calculated across active view profiles.</p>
+                            </div>
+                            <div class="text-right">
+                                <span id="progressBarPercentageText" class="text-xl font-black text-indigo-600">0%</span>
+                                <span class="text-xs font-semibold text-slate-400 block sm:inline ml-1">Complete</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden border border-slate-200/50">
+                            <div id="progressBarFill" class="bg-gradient-to-r from-indigo-500 to-emerald-500 h-full w-0 transition-all duration-500 rounded-full"></div>
+                        </div>
+                    </section>
+
+                    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 select-none">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Assigned Tasks</p>
+                                <h4 id="statTotal" class="text-xl font-bold text-slate-900 mt-0.5">0</h4>
+                            </div>
+                            <div class="p-2.5 bg-indigo-50 text-indigo-600 rounded-lg"><i class="fa-solid fa-list-check text-base"></i></div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pending Tasks</p>
+                                <h4 id="statPending" class="text-xl font-bold text-amber-600 mt-0.5">0</h4>
+                            </div>
+                            <div class="p-2.5 bg-amber-50 text-amber-600 rounded-lg"><i class="fa-solid fa-spinner text-base"></i></div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">In Progress Tasks</p>
+                                <h4 id="statInProgress" class="text-xl font-bold text-blue-600 mt-0.5">0</h4>
+                            </div>
+                            <div class="p-2.5 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-forward-step text-base"></i></div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-xs">
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Completed Tasks</p>
+                                <h4 id="statCompleted" class="text-xl font-bold text-emerald-600 mt-0.5">0</h4>
+                            </div>
+                            <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-circle-check text-base"></i></div>
+                        </div>
+                    </section>
+
+                    <section id="formOperationsControlBlock" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-xs border border-slate-200 lg:col-span-2">
+                            <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider mb-4 flex items-center"><i class="fa-solid fa-circle-plus text-indigo-500 mr-2 text-sm"></i> Launch Task 🚀</h3>
+                            <form id="addTaskForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Task Name</label>
+                                    <input type="text" id="taskTitle" required class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-slate-50/50" placeholder="Task Name ID">
+                                </div>
+                                <div id="adminTaskAssigneeWrapper">
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Assigned To</label>
+                                    <select id="taskAssignee" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-slate-50/50"></select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Task Description</label>
+                                    <input type="text" id="taskDescription" required class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-slate-50/50" placeholder="Provide full details explanation parameters...">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Scheduled Date</label>
+                                    <input type="date" id="taskDate" required class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-slate-50/50">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Task Priority</label>
+                                    <select id="taskPriority" required class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-slate-50/50">
+                                        <option value="Low">Low</option>
+                                        <option value="Medium" selected>Medium</option>
+                                        <option value="High">High</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Task Frequency</label>
+                                    <select id="taskRecurring" required class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-slate-50/50">
+                                        <option value="One-Time" selected>One-Time Task</option>
+                                        <option value="Recurring">Recurring Task</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2 pt-2">
+                                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl transition text-xs uppercase tracking-wider cursor-pointer">Create Task</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="adminUserManagementModule" class="hidden bg-white p-6 rounded-2xl shadow-xs border border-slate-200 flex flex-col">
+                            <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider mb-4 flex items-center"><i class="fa-solid fa-user-plus text-emerald-500 mr-2 text-sm"></i> Add Team Member</h3>
+                            <form id="addUserForm" class="space-y-3 flex-shrink-0">
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">User ID</label>
+                                    <input type="text" id="newUsername" required class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-slate-50/50" placeholder="User ID Handle">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">User Name</label>
+                                    <input type="text" id="newRealName" required class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-slate-50/50" placeholder="Display Full Name">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Password</label>
+                                    <input type="text" id="newPassword" required class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-slate-50/50" placeholder="Access Key">
+                                </div>
+                                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-xl transition text-xs uppercase tracking-wider cursor-pointer">Create Profile</button>
+                            </form>
+                        </div>
+                    </section>
+
+                    <section class="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
+                        <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+                            <div>
+                                <h3 class="font-bold text-slate-900 tracking-tight text-sm flex items-center"><i class="fa-solid fa-database text-slate-400 mr-2"></i> Task Board</h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Track tasks from Pending → In Progress → Completed.</p>
+                            </div>
+                            <div id="lockNotification" class="hidden text-[11px] font-bold rounded-xl px-3 py-1 flex items-center"></div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        <th class="py-3 px-6">Task Details</th>
+                                        <th class="py-3 px-6">Task Type & Priority</th>
+                                        <th class="py-3 px-6">Assigned To</th>
+                                        <th class="py-3 px-6">Assigned Date</th>
+                                        <th class="py-3 px-6">Status</th>
+                                        <th class="py-3 px-6 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="taskTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section id="adminUsersRegistryView" class="hidden bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
+                        <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                            <h3 class="font-bold text-slate-900 tracking-tight text-sm flex items-center"><i class="fa-solid fa-users text-slate-500 mr-2"></i> All User Database</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-sm">
+                                <thead>
+                                    <tr class="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        <th class="py-3 px-6">User ID</th>
+                                        <th class="py-3 px-6">User Name</th>
+                                        <th class="py-3 px-6">Password</th>
+                                        <th class="py-3 px-6 text-right">Administrative Interventions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersRegistryTableBody" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="viewContainerHistory" class="absolute inset-0 overflow-y-auto p-6 md:p-8 space-y-6 hidden">
+                    
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 select-none">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base tracking-tight flex items-center"><i class="fa-solid fa-clock-rotate-left text-slate-500 mr-2"></i> Historical Archives</h3>
+                            <p class="text-xs text-slate-400 mt-0.5">Read-only logs of past tasks. Admins retain deletion privileges.</p>
+                        </div>
+                        <div>
+                            <select id="historyDateSelector" class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer min-w-[180px]"></select>
+                        </div>
+                    </div>
+
+                    <section class="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        <th class="py-3 px-6">Task Details</th>
+                                        <th class="py-3 px-6">Task Type & Priority</th>
+                                        <th class="py-3 px-6">Assigned To</th>
+                                        <th class="py-3 px-6">Archived Date</th>
+                                        <th class="py-3 px-6">Final Status</th>
+                                        <th class="py-3 px-6 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="historyTableBody" class="divide-y divide-slate-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="viewContainerRecycle" class="absolute inset-0 overflow-y-auto p-6 md:p-8 space-y-6 hidden">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base tracking-tight flex items-center"><i class="fa-solid fa-lock text-slate-500 mr-2"></i> 🔒 Secure Bin</h3>
+                            <p class="text-xs text-slate-400 mt-0.5">A safe holding area where deleted data is kept separate until you restore it or let it go forever.</p>
+                        </div>
+                        <button onclick="clearRecycleBin()" class="bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs uppercase tracking-wider py-2.5 px-4 rounded-xl transition inline-flex items-center gap-2 shadow-xs cursor-pointer">
+                            <i class="fa-solid fa-dumpster-fire"></i> Empty the entire bin
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-sm">
+                                <thead>
+                                    <tr class="border-b border-slate-200 bg-slate-50 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                        <th class="py-3 px-6">Task Details</th>
+                                        <th class="py-3 px-6">Assigned To</th>
+                                        <th class="py-3 px-6">Assigned Date</th>
+                                        <th class="py-3 px-6 text-right">System Recovery Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recycleTableBody" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // ADDED YOUR PROVIDED CONFIG + REQUIRED DATABASE URL
+        const firebaseConfig = {
+            apiKey: "AIzaSyD_eTMs8c3p1sSWTilPRZ3d1sbfD3WxRIY",
+            authDomain: "leporce-e12f1.firebaseapp.com",
+            databaseURL: "https://leporce-e12f1-default-rtdb.firebaseio.com",
+            projectId: "leporce-e12f1",
+            storageBucket: "leporce-e12f1.firebasestorage.app",
+            messagingSenderId: "567267227129",
+            appId: "1:567267227129:web:1b9c509095b79bd0a4b928"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // State Variables
+        let users = [];
+        let tasks = [];
+        let recycleBin = [];
+        let historicalArchive = {};
+
+        let currentUser = null;
+        let viewFilterUser = null;
+        let activeInterfaceTab = 'tasks';
+        
+        let sysRuntimeSelectedDate = new Date().toISOString().split('T')[0];
+        let systemInternalTrackerDate = new Date().toISOString().split('T')[0];
+        let base64LocalImageCache = "";
+
+        // DOM Linking
+        const authScreen = document.getElementById("authScreen");
+        const appScreen = document.getElementById("appScreen");
+        const loginForm = document.getElementById("loginForm");
+        const loginError = document.getElementById("loginError");
+        const navUserRealName = document.getElementById("navUserRealName");
+        const navUserBadge = document.getElementById("navUserBadge");
+        const adminUserSelectorContainer = document.getElementById("adminUserSelectorContainer");
+        const adminUserSelector = document.getElementById("adminUserSelector");
+        const adminUserManagementModule = document.getElementById("adminUserManagementModule");
+        const adminUsersRegistryView = document.getElementById("adminUsersRegistryView");
+        const usersRegistryTableBody = document.getElementById("usersRegistryTableBody");
+        const taskAssignee = document.getElementById("taskAssignee");
+        const adminTaskAssigneeWrapper = document.getElementById("adminTaskAssigneeWrapper");
+        const taskTableBody = document.getElementById("taskTableBody");
+        const historyTableBody = document.getElementById("historyTableBody");
+        const recycleTableBody = document.getElementById("recycleTableBody");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const addTaskForm = document.getElementById("addTaskForm");
+        const addUserForm = document.getElementById("addUserForm");
+        const lockNotification = document.getElementById("lockNotification");
+        const calendarHistoricalPicker = document.getElementById("calendarHistoricalPicker");
+        const historyDateSelector = document.getElementById("historyDateSelector");
+        const liveClockTime = document.getElementById("liveClockTime");
+        const liveClockDate = document.getElementById("liveClockDate");
+        const recycleCountBadge = document.getElementById("recycleCountBadge");
+        const formOperationsControlBlock = document.getElementById("formOperationsControlBlock");
+        const sidebarAvatarDisplay = document.getElementById("sidebarAvatarDisplay");
+        const topbarAvatarDisplay = document.getElementById("topbarAvatarDisplay");
+        const profileSettingsDropdown = document.getElementById("profileSettingsDropdown");
+        const avatarUrlInput = document.getElementById("avatarUrlInput");
+        const avatarLocalFileInput = document.getElementById("avatarLocalFileInput");
+        const fileUploadLabelText = document.getElementById("fileUploadLabelText");
+
+        calendarHistoricalPicker.value = sysRuntimeSelectedDate;
+
+        // ================= FIREBASE REALTIME LISTENERS =================
+        onValue(ref(db, 'leporce_company/users'), (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                users = Object.values(data);
+            } else {
+                users = [
+                    { username: "admin", name: "Administrator System", password: "admin123", role: "admin", avatar: "" },
+                    { username: "user1", name: "Employee Account 01", password: "user123", role: "user", avatar: "" }
+                ];
+                set(ref(db, 'leporce_company/users'), users);
+            }
+            if(currentUser) {
+                const refreshedSelf = users.find(u => u.username === currentUser.username);
+                if(refreshedSelf) currentUser = refreshedSelf;
+                rebuildSystemSelectDropdowns();
+                renderActiveWorkspaceView();
+            }
+        });
+
+        onValue(ref(db, 'leporce_company/tasks'), (snapshot) => {
+            tasks = snapshot.val() ? Object.values(snapshot.val()) : [];
+            if(currentUser) renderActiveWorkspaceView();
+        });
+
+        onValue(ref(db, 'leporce_company/recycle'), (snapshot) => {
+            recycleBin = snapshot.val() ? Object.values(snapshot.val()) : [];
+            if(currentUser) renderActiveWorkspaceView();
+        });
+
+        onValue(ref(db, 'leporce_company/historical'), (snapshot) => {
+            historicalArchive = snapshot.val() || {};
+            if(currentUser) {
+                if (activeInterfaceTab === 'history') populateHistoryDateDropdown();
+                renderActiveWorkspaceView();
+            }
+        });
+
+        // Global DB Write Command
+        window.syncStateToFirebase = function(branch, dataObject) {
+            set(ref(db, 'leporce_company/' + branch), dataObject);
+        }
+
+        // ================= DECOUPLED CLOCK LOOP ENGINE =================
+        function executeLiveClockTick() {
+            const now = new Date();
+            liveClockTime.textContent = now.toLocaleTimeString();
+            liveClockDate.textContent = now.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+            
+            const currentStringDate = now.toISOString().split('T')[0];
+            if (currentStringDate !== systemInternalTrackerDate) {
+                executeSystemDateRolloverTransition(systemInternalTrackerDate, currentStringDate);
+            }
+        }
+        setInterval(executeLiveClockTick, 1000);
+        executeLiveClockTick();
+
+        function executeSystemDateRolloverTransition(oldDateStr, newDateStr) {
+            const recurringActiveTasks = tasks.filter(t => t.date === oldDateStr && t.recurring === 'Recurring');
+            const dayTotalToArchive = tasks.filter(t => t.date === oldDateStr);
+            
+            if (dayTotalToArchive.length > 0) {
+                if (!historicalArchive[oldDateStr]) historicalArchive[oldDateStr] = [];
+                historicalArchive[oldDateStr] = historicalArchive[oldDateStr].concat(dayTotalToArchive);
+                syncStateToFirebase('historical', historicalArchive);
+            }
+
+            let persistentLiveTasks = tasks.filter(t => t.date !== oldDateStr);
+
+            recurringActiveTasks.forEach(blueprint => {
+                if(!persistentLiveTasks.some(t => t.title === blueprint.title && t.assignee === blueprint.assignee && t.date === newDateStr)) {
+                    persistentLiveTasks.push({
+                        id: Date.now() + Math.random(),
+                        title: blueprint.title,
+                        desc: blueprint.desc,
+                        assignee: blueprint.assignee,
+                        date: newDateStr,
+                        status: "Pending",
+                        priority: blueprint.priority,
+                        recurring: "Recurring"
+                    });
+                }
+            });
+
+            tasks = persistentLiveTasks;
+            syncStateToFirebase('tasks', tasks);
+            systemInternalTrackerDate = newDateStr;
+            
+            if (sysRuntimeSelectedDate === oldDateStr) {
+                sysRuntimeSelectedDate = newDateStr;
+                calendarHistoricalPicker.value = newDateStr;
+            }
+            if(currentUser) renderActiveWorkspaceView();
+        }
+
+        // ================= NAVIGATION MATRIX =================
+        window.switchView = function(targetTab) {
+            activeInterfaceTab = targetTab;
+            const activeClass = "w-full flex items-center justify-between px-4 py-3 text-white bg-indigo-600 rounded-xl transition font-medium cursor-pointer";
+            const inactiveClass = "w-full flex items-center justify-between px-4 py-3 text-slate-400 hover:bg-slate-800 hover:text-slate-200 rounded-xl transition font-medium cursor-pointer";
+            
+            document.getElementById("tabBtnTasks").className = targetTab === 'tasks' ? activeClass : inactiveClass;
+            document.getElementById("tabBtnHistory").className = targetTab === 'history' ? activeClass : inactiveClass;
+            document.getElementById("tabBtnRecycle").className = targetTab === 'recycle' ? activeClass : inactiveClass;
+            
+            document.getElementById("viewContainerTasks").classList.toggle("hidden", targetTab !== 'tasks');
+            document.getElementById("viewContainerHistory").classList.toggle("hidden", targetTab !== 'history');
+            document.getElementById("viewContainerRecycle").classList.toggle("hidden", targetTab !== 'recycle');
+            
+            if (targetTab === 'history') {
+                populateHistoryDateDropdown();
+            }
+            renderActiveWorkspaceView();
+        }
+
+        calendarHistoricalPicker.addEventListener("change", (e) => {
+            sysRuntimeSelectedDate = e.target.value;
+            renderActiveWorkspaceView();
+        });
+
+        window.populateHistoryDateDropdown = function() {
+            const currentVal = historyDateSelector.value;
+            historyDateSelector.innerHTML = "";
+            const dates = Object.keys(historicalArchive).sort((a, b) => new Date(b) - new Date(a));
+            
+            if (dates.length === 0) {
+                const opt = document.createElement("option");
+                opt.value = "";
+                opt.textContent = "No History Available";
+                historyDateSelector.appendChild(opt);
+                historyDateSelector.disabled = true;
+            } else {
+                historyDateSelector.disabled = false;
+                dates.forEach(d => {
+                    const opt = document.createElement("option");
+                    opt.value = d;
+                    opt.textContent = d;
+                    historyDateSelector.appendChild(opt);
+                });
+                if (dates.includes(currentVal)) {
+                    historyDateSelector.value = currentVal;
+                }
+            }
+        }
+
+        historyDateSelector.addEventListener("change", renderActiveWorkspaceView);
+
+        // ================= PROFILE MANAGERS =================
+        avatarLocalFileInput.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            fileUploadLabelText.textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                base64LocalImageCache = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        window.toggleProfileSettingsDropdown = function() {
+            profileSettingsDropdown.classList.toggle("hidden");
+        }
+        
+        window.saveProfileAvatar = function() {
+            let nextUrl = avatarUrlInput.value.trim();
+            if (base64LocalImageCache) nextUrl = base64LocalImageCache;
+            
+            if(!nextUrl) return;
+            currentUser.avatar = nextUrl;
+            const targetIndex = users.findIndex(u => u.username === currentUser.username);
+            if(targetIndex !== -1) {
+                users[targetIndex].avatar = nextUrl;
+                syncStateToFirebase('users', users);
+            }
+            
+            sidebarAvatarDisplay.src = nextUrl;
+            topbarAvatarDisplay.src = nextUrl;
+            profileSettingsDropdown.classList.add("hidden");
+            avatarUrlInput.value = "";
+            base64LocalImageCache = "";
+            fileUploadLabelText.textContent = "Select file from local storage";
+        }
+
+        // ================= AUTHENTICATION GATEWAY =================
+        loginForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const uInput = document.getElementById("username").value.trim().toLowerCase();
+            const pInput = document.getElementById("password").value;
+            
+            const found = users.find(u => u.username.toLowerCase() === uInput && u.password === pInput);
+            if(found) {
+                currentUser = found;
+                viewFilterUser = found.username;
+                loginError.classList.add("hidden");
+                
+                const profileImg = currentUser.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop";
+                sidebarAvatarDisplay.src = profileImg;
+                topbarAvatarDisplay.src = profileImg;
+
+                loginForm.reset();
+                bootDashboard();
+            } else {
+                loginError.classList.remove("hidden");
+            }
+        });
+
+        logoutBtn.addEventListener("click", () => {
+            currentUser = null; viewFilterUser = null;
+            appScreen.classList.add("hidden");
+            authScreen.classList.remove("hidden");
+        });
+
+        function bootDashboard() {
+            authScreen.classList.add("hidden");
+            appScreen.classList.remove("hidden");
+
+            navUserRealName.textContent = currentUser.name;
+            navUserBadge.textContent = currentUser.role;
+
+            if(currentUser.role === 'admin') {
+                navUserBadge.className = "inline-block text-[9px] uppercase font-black px-1.5 py-0.5 rounded-sm mt-0.5 bg-rose-500/10 text-rose-400 border border-rose-500/20";
+                adminUserSelectorContainer.classList.remove("hidden");
+                adminUserManagementModule.classList.remove("hidden");
+                adminUsersRegistryView.classList.remove("hidden");
+                adminTaskAssigneeWrapper.classList.remove("hidden");
+                document.getElementById("taskAssignee").required = true;
+            } else {
+                navUserBadge.className = "inline-block text-[9px] uppercase font-black px-1.5 py-0.5 rounded-sm mt-0.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20";
+                adminUserSelectorContainer.classList.add("hidden");
+                adminUserManagementModule.classList.add("hidden");
+                adminUsersRegistryView.classList.add("hidden");
+                adminTaskAssigneeWrapper.classList.add("hidden");
+                document.getElementById("taskAssignee").required = false;
+            }
+
+            rebuildSystemSelectDropdowns();
+            switchView('tasks');
+        }
+
+        window.rebuildSystemSelectDropdowns = function() {
+            adminUserSelector.innerHTML = "";
+            taskAssignee.innerHTML = "";
+
+            users.forEach(u => {
+                const opt1 = document.createElement("option");
+                opt1.value = u.username;
+                opt1.textContent = u.role === 'admin' ? `${u.name} (Admin)` : u.name;
+                if(u.username === viewFilterUser) opt1.selected = true;
+                adminUserSelector.appendChild(opt1);
+
+                const opt2 = document.createElement("option");
+                opt2.value = u.username;
+                opt2.textContent = u.name;
+                taskAssignee.appendChild(opt2);
+            });
+        }
+
+        adminUserSelector.addEventListener("change", (e) => {
+            viewFilterUser = e.target.value;
+            renderActiveWorkspaceView();
+        });
+
+        // ================= HUMAN RESOURCE PROFILE MODIFICATIONS =================
+        addUserForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const uHandle = document.getElementById("newUsername").value.trim().toLowerCase();
+            const nHandle = document.getElementById("newRealName").value.trim();
+            const pHandle = document.getElementById("newPassword").value;
+
+            if(users.some(u => u.username === uHandle)) {
+                alert("Identity Allocation Collision: User ID handle has already been allocated.");
+                return;
+            }
+
+            users.push({ username: uHandle, name: nHandle, password: pHandle, role: "user", avatar: "" });
+            syncStateToFirebase('users', users);
+            addUserForm.reset();
+        });
+
+        window.triggerAdministrativeUserUpdate = function(username) {
+            const userTarget = users.find(u => u.username === username);
+            if(!userTarget) return;
+
+            const nextName = prompt("Modify Assigned User Name Profile:", userTarget.name);
+            const nextPass = prompt("Modify Security Password Key:", userTarget.password);
+            
+            if(!nextName || !nextPass) { alert("Modification process aborted. Non-empty inputs required."); return; }
+            userTarget.name = nextName.trim();
+            userTarget.password = nextPass.trim();
+            
+            syncStateToFirebase('users', users);
+        };
+
+        window.triggerAdministrativeUserDelete = function(username) {
+            if(username === 'admin') { alert("Core Fault Security Check: Primary system root deployment account cannot be deleted."); return; }
+            if(!confirm(`Confirm full destructive profile deletion of [${username}]?`)) return;
+
+            users = users.filter(u => u.username !== username);
+            if(viewFilterUser === username) viewFilterUser = 'admin';
+            syncStateToFirebase('users', users);
+        };
+
+        // ================= OPERATIONAL TASK HANDLING ENGINE =================
+        addTaskForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const title = document.getElementById("taskTitle").value.trim();
+            const desc = document.getElementById("taskDescription").value.trim();
+            const priority = document.getElementById("taskPriority").value;
+            const recurring = document.getElementById("taskRecurring").value;
+            const date = document.getElementById("taskDate").value;
+            
+            const assignee = currentUser.role === 'admin' ? document.getElementById("taskAssignee").value : currentUser.username;
+            const baseTask = { id: Date.now() + Math.random(), title, desc, assignee, date, status: "Pending", priority, recurring };
+            const absoluteCurrentDateString = new Date().toISOString().split('T')[0];
+            
+            if(date < absoluteCurrentDateString) {
+                if(!historicalArchive[date]) historicalArchive[date] = [];
+                historicalArchive[date].push(baseTask);
+                syncStateToFirebase('historical', historicalArchive);
+            } else {
+                tasks.push(baseTask);
+            }
+
+            if(recurring === 'Recurring') {
+                for(let i = 1; i <= 200; i++) {
+                    let futureFrameDate = new Date(date);
+                    futureFrameDate.setDate(futureFrameDate.getDate() + i);
+                    let futureFrameDateStr = futureFrameDate.toISOString().split('T')[0];
+                    
+                    if(futureFrameDateStr < absoluteCurrentDateString) {
+                        if(!historicalArchive[futureFrameDateStr]) historicalArchive[futureFrameDateStr] = [];
+                        historicalArchive[futureFrameDateStr].push({ ...baseTask, id: Date.now() + Math.random() + i, date: futureFrameDateStr });
+                    } else {
+                        tasks.push({ id: Date.now() + Math.random() + i, title, desc, assignee, date: futureFrameDateStr, status: "Pending", priority, recurring: "Recurring" });
+                    }
+                }
+                syncStateToFirebase('historical', historicalArchive);
+            }
+
+            syncStateToFirebase('tasks', tasks);
+            addTaskForm.reset();
+            document.getElementById("taskDate").value = absoluteCurrentDateString;
+        });
+
+        window.openInlineTaskTextEdit = function(taskId, isHistorical) {
+            const absoluteCurrentDateString = new Date().toISOString().split('T')[0];
+            if (sysRuntimeSelectedDate < absoluteCurrentDateString && currentUser.role !== 'admin') {
+                alert("Security Restriction: Archived past text records are protected (Read-Only Mode Active).");
+                return;
+            }
+
+            let sourceArray = isHistorical ? (historicalArchive[sysRuntimeSelectedDate] || []) : tasks;
+            let targetObj = sourceArray.find(t => t.id === taskId);
+            if(!targetObj) return;
+
+            const nextTitle = prompt("Update Task Name:", targetObj.title);
+            if(nextTitle === null) return; 
+            const nextDesc = prompt("Update Task Description Details:", targetObj.desc);
+            if(nextDesc === null) return;
+
+            targetObj.title = nextTitle.trim() || targetObj.title;
+            targetObj.desc = nextDesc.trim() || targetObj.desc;
+
+            syncStateToFirebase('tasks', tasks);
+            syncStateToFirebase('historical', historicalArchive);
+        }
+
+        window.advanceTaskStatePipeline = function(taskId, isHistorical) {
+            const absoluteCurrentDateString = new Date().toISOString().split('T')[0];
+            if (sysRuntimeSelectedDate < absoluteCurrentDateString && currentUser.role !== 'admin') {
+                alert("Security Alert: Historical records are verification-locked against modifications.");
+                return;
+            }
+
+            let taskObj = null;
+            if(isHistorical) {
+                const dayLog = historicalArchive[sysRuntimeSelectedDate] || [];
+                taskObj = dayLog.find(t => t.id === taskId);
+            } else {
+                taskObj = tasks.find(t => t.id === taskId);
+            }
+
+            if(!taskObj) return;
+            if(taskObj.status === "Pending") taskObj.status = "In Progress";
+            else if(taskObj.status === "In Progress") taskObj.status = "Completed";
+            else taskObj.status = "Pending"; 
+
+            syncStateToFirebase('tasks', tasks);
+            syncStateToFirebase('historical', historicalArchive);
+        };
+
+        window.stageTaskForDecommission = function(taskId, isHistorical, explicitDate = null) {
+            const absoluteCurrentDateString = new Date().toISOString().split('T')[0];
+            const targetDate = explicitDate || sysRuntimeSelectedDate;
+
+            if (targetDate < absoluteCurrentDateString && currentUser.role !== 'admin') {
+                alert("Security Alert: Historical entries deletion actions are restricted.");
+                return;
+            }
+            
+            if(!confirm("Are you sure you want to delete this task and move it to the Secure Bin?")) return;
+
+            let targetTask = null;
+            if(isHistorical) {
+                targetTask = historicalArchive[targetDate].find(t => t.id === taskId);
+                historicalArchive[targetDate] = historicalArchive[targetDate].filter(t => t.id !== taskId);
+                syncStateToFirebase('historical', historicalArchive);
+            } else {
+                targetTask = tasks.find(t => t.id === taskId);
+                tasks = tasks.filter(t => t.id !== taskId);
+                syncStateToFirebase('tasks', tasks);
+            }
+
+            if(targetTask) {
+                recycleBin.push({ ...targetTask, originalContextArchived: isHistorical });
+                syncStateToFirebase('recycle', recycleBin);
+            }
+        };
+
+        window.restorePurgedTaskFrame = function(taskId) {
+            const targetIndex = recycleBin.findIndex(t => t.id === taskId);
+            if(targetIndex === -1) return;
+
+            const item = recycleBin[targetIndex];
+            recycleBin.splice(targetIndex, 1);
+            syncStateToFirebase('recycle', recycleBin);
+
+            if(item.originalContextArchived) {
+                if(!historicalArchive[item.date]) historicalArchive[item.date] = [];
+                historicalArchive[item.date].push(item);
+                syncStateToFirebase('historical', historicalArchive);
+            } else {
+                tasks.push(item);
+                syncStateToFirebase('tasks', tasks);
+            }
+        };
+
+        window.annihilateSingleTrashItem = function(taskId) {
+            if(!confirm("Warning! Permanent deletion cannot be reversed.")) return;
+            recycleBin = recycleBin.filter(t => t.id !== taskId);
+            syncStateToFirebase('recycle', recycleBin);
+        };
+
+        window.clearRecycleBin = function() {
+            if(recycleBin.length === 0) { alert("Recycle bin structure is already fully cleared."); return; }
+            if(!confirm("CRITICAL INTERVENTION: Purge all tracked records from secure bin? This cannot be undone.")) return;
+            recycleBin = [];
+            syncStateToFirebase('recycle', recycleBin);
+        };
+
+        // ================= GRAPHICS UI DATA RENDER LAYER =================
+        window.renderActiveWorkspaceView = function() {
+            recycleCountBadge.textContent = recycleBin.length;
+            const absoluteCurrentDateString = new Date().toISOString().split('T')[0];
+            
+            const isPastDate = sysRuntimeSelectedDate < absoluteCurrentDateString;
+            const isFutureDate = sysRuntimeSelectedDate > absoluteCurrentDateString;
+            const isRegularUser = currentUser.role !== 'admin';
+
+            if (activeInterfaceTab === 'tasks') {
+                if (isPastDate) {
+                    if (isRegularUser) {
+                        lockNotification.textContent = "🔒 View-Only Mode Active (History Locked)";
+                        lockNotification.className = "text-[11px] font-bold bg-amber-50 border border-amber-200 text-amber-800 px-3 py-1 rounded-xl flex items-center shadow-xs animate-pulse";
+                        formOperationsControlBlock.classList.add("hidden");
+                    } else {
+                        lockNotification.textContent = "🔧 Admin Overwrite Mode Active (Archived View)";
+                        lockNotification.className = "text-[11px] font-bold bg-indigo-50 border border-indigo-200 text-indigo-800 px-3 py-1 rounded-xl flex items-center shadow-xs";
+                        formOperationsControlBlock.classList.remove("hidden");
+                    }
+                    lockNotification.classList.remove("hidden");
+                } else if (isFutureDate) {
+                    lockNotification.textContent = "🚀 Forward Planning Horizon Active (Full Edit Mode)";
+                    lockNotification.className = "text-[11px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1 rounded-xl flex items-center shadow-xs";
+                    lockNotification.classList.remove("hidden");
+                    formOperationsControlBlock.classList.remove("hidden"); 
+                } else {
+                    lockNotification.classList.add("hidden");
+                    formOperationsControlBlock.classList.remove("hidden");
+                }
+            }
+
+            if(currentUser.role === 'admin') {
+                usersRegistryTableBody.innerHTML = "";
+                users.forEach(u => {
+                    const row = document.createElement("tr");
+                    row.className = "hover:bg-slate-50 transition text-xs";
+                    row.innerHTML = `
+                        <td class="py-3 px-6 font-mono font-bold text-slate-700">${u.username}</td>
+                        <td class="py-3 px-6 font-semibold text-slate-900">${u.name}</td>
+                        <td class="py-3 px-6 font-mono text-slate-400">${u.password}</td>
+                        <td class="py-3 px-6 text-right space-x-1">
+                            <button onclick="triggerAdministrativeUserUpdate('${u.username}')" class="text-indigo-600 hover:bg-indigo-50 font-bold px-2 py-1 rounded transition"><i class="fa-solid fa-user-pen"></i> Edit</button>
+                            <button onclick="triggerAdministrativeUserDelete('${u.username}')" class="text-rose-600 hover:bg-rose-50 font-bold px-2 py-1 rounded transition" ${u.username === 'admin' ? 'disabled style="opacity:0.3;"':''}><i class="fa-solid fa-user-minus"></i> Remove</button>
+                        </td>
+                    `;
+                    usersRegistryTableBody.appendChild(row);
+                });
+            }
+
+            if(activeInterfaceTab === 'history') {
+                historyTableBody.innerHTML = "";
+                const selectedHistoryDate = historyDateSelector.value;
+                
+                if(!selectedHistoryDate || !historicalArchive[selectedHistoryDate] || historicalArchive[selectedHistoryDate].length === 0) {
+                    historyTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400 font-semibold"><i class="fa-solid fa-folder-open text-2xl block mb-2 text-slate-300"></i>No archived data available for this selection.</td></tr>`;
+                    return;
+                }
+                
+                let historyScopedTasks = historicalArchive[selectedHistoryDate];
+                if(currentUser.role !== 'admin') {
+                    historyScopedTasks = historyScopedTasks.filter(t => t.assignee === currentUser.username);
+                } else {
+                    historyScopedTasks = historyScopedTasks.filter(t => t.assignee === viewFilterUser);
+                }
+
+                const orderStateWeights = { "Pending": 1, "In Progress": 2, "Completed": 3 };
+                historyScopedTasks.sort((a, b) => orderStateWeights[a.status] - orderStateWeights[b.status]);
+
+                if(historyScopedTasks.length === 0) {
+                    historyTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400 font-semibold"><i class="fa-solid fa-folder-open text-2xl block mb-2 text-slate-300"></i>No historical records mapped to this account on this date.</td></tr>`;
+                    return;
+                }
+
+                historyScopedTasks.forEach(t => {
+                    const tr = document.createElement("tr");
+                    tr.className = "hover:bg-slate-50/70 transition align-middle text-xs";
+
+                    let statusBadgeMarkup = "";
+                    if(t.status === 'Pending') statusBadgeMarkup = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-bold bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-circle text-[6px] text-amber-500"></i> Pending</span>`;
+                    else if(t.status === 'In Progress') statusBadgeMarkup = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-bold bg-blue-50 text-blue-700 border border-blue-200"><i class="fa-solid fa-spinner animate-spin text-[8px] text-blue-500"></i> In Progress</span>`;
+                    else statusBadgeMarkup = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check-double text-[8px] text-emerald-500"></i> Completed</span>`;
+
+                    let priorityStyles = "bg-slate-100 text-slate-700";
+                    if(t.priority === 'High') priorityStyles = "bg-rose-50 text-rose-700 border border-rose-200";
+                    if(t.priority === 'Medium') priorityStyles = "bg-amber-50 text-amber-700 border border-amber-200";
+
+                    const targetOwnerObject = users.find(u => u.username === t.assignee) || { name: t.assignee };
+                    const historyActionButtons = currentUser.role === 'admin'
+                        ? `<button onclick="stageTaskForDecommission(${t.id}, true, '${selectedHistoryDate}')" class="text-rose-600 hover:bg-rose-50 font-bold py-1 px-2 rounded-lg transition inline-flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-trash-can"></i> Delete</button>`
+                        : `<span class="text-slate-400 font-medium italic"><i class="fa-solid fa-eye"></i> View Only</span>`;
+
+                    tr.innerHTML = `
+                        <td class="py-3.5 px-6 max-w-xs">
+                            <div class="font-bold text-slate-900 truncate">${t.title}</div>
+                            <div class="text-slate-400 text-[11px] truncate mt-0.5">${t.desc || ''}</div>
+                        </td>
+                        <td class="py-3.5 px-6 space-y-1">
+                            <span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wide uppercase ${priorityStyles}">${t.priority}</span>
+                            <div class="text-[9px] text-slate-400 font-medium"><i class="fa-solid fa-arrows-spin"></i> ${t.recurring === 'Recurring' ? 'Recurring Task':'One-Time Task'}</div>
+                        </td>
+                        <td class="py-3.5 px-6 font-medium text-slate-500">${targetOwnerObject.name}</td>
+                        <td class="py-3.5 px-6 font-mono text-slate-500">${t.date}</td>
+                        <td class="py-3.5 px-6">${statusBadgeMarkup}</td>
+                        <td class="py-3.5 px-6 text-right space-x-1 whitespace-nowrap">${historyActionButtons}</td>
+                    `;
+                    historyTableBody.appendChild(tr);
+                });
+                return;
+            }
+
+            if(activeInterfaceTab === 'recycle') {
+                recycleTableBody.innerHTML = "";
+                if(recycleBin.length === 0) {
+                    recycleTableBody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-slate-400 font-medium"><i class="fa-solid fa-box-open text-2xl block mb-2"></i>Recycle isolation vault remains clear.</td></tr>`;
+                    return;
+                }
+                recycleBin.forEach(t => {
+                    const rRow = document.createElement("tr");
+                    rRow.className = "hover:bg-slate-50/80 transition text-xs";
+                    const profileOwnerName = (users.find(u => u.username === t.assignee) || {name: t.assignee}).name;
+                    rRow.innerHTML = `
+                        <td class="py-3 px-6 font-bold text-slate-900">${t.title}</td>
+                        <td class="py-3 px-6 text-slate-500 font-medium">${profileOwnerName}</td>
+                        <td class="py-3 px-6 font-mono text-slate-400">${t.date}</td>
+                        <td class="py-3 px-6 text-right space-x-1 whitespace-nowrap">
+                            <button onclick="restorePurgedTaskFrame(${t.id})" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-1 px-2.5 rounded-lg transition"><i class="fa-solid fa-rotate-left"></i> Restore</button>
+                            <button onclick="annihilateSingleTrashItem(${t.id})" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold py-1 px-2.5 rounded-lg transition"><i class="fa-solid fa-ban"></i> Delete</button>
+                        </td>
+                    `;
+                    recycleTableBody.appendChild(rRow);
+                });
+                return;
+            }
+
+            taskTableBody.innerHTML = "";
+            let dataScopeSource = isPastDate ? (historicalArchive[sysRuntimeSelectedDate] || []) : tasks;
+            
+            let accountScopedTasks = dataScopeSource.filter(t => t.date === sysRuntimeSelectedDate);
+            if(currentUser.role !== 'admin') {
+                accountScopedTasks = accountScopedTasks.filter(t => t.assignee === currentUser.username);
+            } else {
+                accountScopedTasks = accountScopedTasks.filter(t => t.assignee === viewFilterUser);
+            }
+
+            const countTotal = accountScopedTasks.length;
+            const countPending = accountScopedTasks.filter(t => t.status === "Pending").length;
+            const countInProgress = accountScopedTasks.filter(t => t.status === "In Progress").length;
+            const countCompleted = accountScopedTasks.filter(t => t.status === "Completed").length;
+
+            document.getElementById("statTotal").textContent = countTotal;
+            document.getElementById("statPending").textContent = countPending;
+            document.getElementById("statInProgress").textContent = countInProgress;
+            document.getElementById("statCompleted").textContent = countCompleted;
+
+            const completionCalculatedRatio = countTotal > 0 ? Math.round((countCompleted / countTotal) * 100) : 0;
+            document.getElementById("progressBarPercentageText").textContent = `${completionCalculatedRatio}%`;
+            document.getElementById("progressBarFill").style.width = `${completionCalculatedRatio}%`;
+
+            const orderStateWeights = { "Pending": 1, "In Progress": 2, "Completed": 3 };
+            accountScopedTasks.sort((a, b) => orderStateWeights[a.status] - orderStateWeights[b.status]);
+
+            if(accountScopedTasks.length === 0) {
+                taskTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400 font-semibold"><i class="fa-solid fa-folder-open text-2xl block mb-2 text-slate-300"></i>No active tasks mapped inside this structural scope footprint.</td></tr>`;
+                return;
+            }
+
+            accountScopedTasks.forEach(t => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-50/70 transition align-middle text-xs";
+
+                let statusBadgeMarkup = "";
+                if(t.status === 'Pending') {
+                    statusBadgeMarkup = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-bold bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-circle text-[6px] text-amber-500"></i> Pending</span>`;
+                } else if(t.status === 'In Progress') {
+                    statusBadgeMarkup = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-bold bg-blue-50 text-blue-700 border border-blue-200"><i class="fa-solid fa-spinner animate-spin text-[8px] text-blue-500"></i> In Progress</span>`;
+                } else {
+                    statusBadgeMarkup = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check-double text-[8px] text-emerald-500"></i> Completed</span>`;
+                }
+
+                let priorityStyles = "bg-slate-100 text-slate-700";
+                if(t.priority === 'High') priorityStyles = "bg-rose-50 text-rose-700 border border-rose-200";
+                if(t.priority === 'Medium') priorityStyles = "bg-amber-50 text-amber-700 border border-amber-200";
+
+                const isOperationControlLocked = (isPastDate && currentUser.role !== 'admin');
+                const targetOwnerObject = users.find(u => u.username === t.assignee) || { name: t.assignee };
+
+                tr.innerHTML = `
+                    <td class="py-3.5 px-6 max-w-xs">
+                        <div class="font-bold text-slate-900 truncate">${t.title}</div>
+                        <div class="text-slate-400 text-[11px] truncate mt-0.5">${t.desc || ''}</div>
+                    </td>
+                    <td class="py-3.5 px-6 space-y-1">
+                        <span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wide uppercase ${priorityStyles}">${t.priority}</span>
+                        <div class="text-[9px] text-slate-400 font-medium"><i class="fa-solid fa-arrows-spin"></i> ${t.recurring === 'Recurring' ? 'Recurring Task':'One-Time Task'}</div>
+                    </td>
+                    <td class="py-3.5 px-6 font-medium text-slate-500">${targetOwnerObject.name}</td>
+                    <td class="py-3.5 px-6 font-mono text-slate-500">${t.date}</td>
+                    <td class="py-3.5 px-6">${statusBadgeMarkup}</td>
+                    <td class="py-3.5 px-6 text-right space-x-1 whitespace-nowrap">
+                        <button onclick="advanceTaskStatePipeline(${t.id}, ${isPastDate})" ${isOperationControlLocked ? 'disabled style="opacity:0.3; cursor:not-allowed;"':''} class="bg-white hover:bg-slate-100 text-slate-700 font-bold py-1 px-2 border border-slate-200 rounded-lg transition inline-flex items-center gap-1 ${isOperationControlLocked ? '' : 'cursor-pointer'}">
+                            <i class="fa-solid fa-rotate"></i> Step State
+                        </button>
+                        <button onclick="openInlineTaskTextEdit(${t.id}, ${isPastDate})" ${isOperationControlLocked ? 'disabled style="opacity:0.3; cursor:not-allowed;"':''} class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-1 px-2 rounded-lg transition inline-flex items-center gap-1 ${isOperationControlLocked ? '' : 'cursor-pointer'}">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </button>
+                        <button onclick="stageTaskForDecommission(${t.id}, ${isPastDate})" ${isOperationControlLocked ? 'disabled style="opacity:0.3; cursor:not-allowed;"':''} class="text-rose-600 hover:bg-rose-50 font-bold py-1 px-2 rounded-lg transition inline-flex items-center gap-1 ${isOperationControlLocked ? '' : 'cursor-pointer'}">
+                            <i class="fa-solid fa-trash-can"></i> Delete
+                        </button>
+                    </td>
+                `;
+                taskTableBody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
